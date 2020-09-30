@@ -11,8 +11,8 @@ const DUMMY_PLACES = [
         address: 'Tower Bridge Rd, London SE1 2UP',
         imageUrl: 'https://www.swedishnomad.com/wp-content/images/2020/03/Tower-Bridge.jpg',
         location: {
-            lat: 51.5054564,
-            lng: -0.0775505
+            lat: 51.505455,
+            lng: -0.075356
         },
         creator: 'u1'
     },
@@ -23,8 +23,8 @@ const DUMMY_PLACES = [
         address: 'Tower Bridge Rd, London SE1 2UP',
         imageUrl: 'https://www.swedishnomad.com/wp-content/images/2020/03/Tower-Bridge.jpg',
         location: {
-            lat: 51.5054564,
-            lng: -0.0775505
+            lat: 51.505455,
+            lng: -0.075356
         },
         creator: 'u2'
     }
