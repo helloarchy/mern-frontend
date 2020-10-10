@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useEffect} from 'react';
 
 import {validate} from "../../utility/validators";
 
@@ -37,8 +37,16 @@ const Input = props => {
         isValid: false
     });
 
+    /* Get values for useEffect to avoid infinite loops on value updating when fed back to parent */
+    const {id, onInput} = props;
+    const {value, isValid} = inputState;
+    useEffect(() => {
+        onInput(id, value, isValid)
+    }, [id, value, isValid, onInput]);
+
+
+    /* On every change dispatch use reducer */
     const changeHandler = event => {
-        // Dispatch to userReducer the action values
         dispatch({
             type: 'CHANGE',
             val: event.target.value,
