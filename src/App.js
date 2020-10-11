@@ -10,6 +10,7 @@ import Users from './user/pages/Users';
 import NewPlace from './places/pages/NewPlace';
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import UserPlaces from "./places/pages/UserPlaces";
+import UpdatePlace from "./places/pages/UpdatePlace";
 
 const App = () => {
     return (
@@ -25,6 +26,11 @@ const App = () => {
                     </Route>
                     <Route path={'/places/new'} exact={true}>
                         <NewPlace/>
+                    </Route>
+                    <Route path={'/places/:placeId'}>
+                        {/* Note order matters, '/new' would be a
+                            place id if this was routed before */}
+                        <UpdatePlace/>
                     </Route>
                     <Redirect to={'/'}/>
                 </Switch>
