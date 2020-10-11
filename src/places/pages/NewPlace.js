@@ -1,10 +1,13 @@
 import React, {useCallback, useReducer} from 'react';
 
-import Input from "../../shared/components/FormElements/Input";
-import {VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from "../../shared/utility/validators";
+import Input from '../../shared/components/FormElements/Input';
+import Button from '../../shared/components/FormElements/Button';
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_MINLENGTH
+} from '../../shared/utility/validators';
 
-import './NewPlace.css';
-import Button from "../../shared/components/FormElements/Button";
+import './PlaceForm.css';
 
 /**
  * Handle the state of the whole new place form
@@ -17,9 +20,11 @@ const formReducer = (state, action) => {
             let isFormValid = true;
             for (const inputId in state.inputs) {
                 // If any validation is false, then the whole form is invalid
-                isFormValid = inputId === action.inputId ?
-                    isFormValid && action.isValid :
-                    isFormValid && state.inputs[inputId].isValid;
+                if (inputId === action.inputId) {
+                    isFormValid = isFormValid && action.isValid;
+                } else {
+                    isFormValid = isFormValid && state.inputs[inputId].isValid;
+                }
             }
             return {
                 ...state,
@@ -48,6 +53,10 @@ const NewPlace = () => {
             description: {
                 value: '',
                 isValid: false
+            },
+            address: {
+                value: '',
+                isValid: false
             }
         },
         isValid: false
@@ -68,7 +77,7 @@ const NewPlace = () => {
 
     const submitHandler = event => {
         event.preventDefault(); // Don't refresh page
-        console.log(formState.inputs) // TODO: Send to backend
+        console.log(formState.inputs); // TODO: Send to backend
     };
 
 

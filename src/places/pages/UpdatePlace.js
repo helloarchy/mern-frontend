@@ -1,8 +1,11 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
-import Button from "../../shared/components/FormElements/Button";
+
 import Input from "../../shared/components/FormElements/Input";
-import {VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from "../../shared/utility/validators";
+import Button from "../../shared/components/FormElements/Button";
+import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from "../../shared/utility/validators";
+
+import './PlaceForm.css'
 
 const DUMMY_PLACES = [
     {
@@ -32,19 +35,21 @@ const DUMMY_PLACES = [
 ];
 
 const UpdatePlace = () => {
+    console.log("Tried to render update place!")
+
     const placeId = useParams().placeId;
-    const identifiedPlace = DUMMY_PLACES.find(place => place.id === placeId)
+    const identifiedPlace = DUMMY_PLACES.find(place => place.id === placeId);
 
-    const inputHandler = () => {
-        console.log('Input entered')
-    };
+    if (!identifiedPlace) {
+        return (
+            <div className={'center'}>
+                <h2>Could not find place!</h2>
+            </div>
+        );
+    }
 
-    return !identifiedPlace ? (
-        <div className={'centre'}>
-            <h2>Could not find place!</h2>
-        </div>
-    ) : (
-        <form>
+    return (
+        <form className={'place-form'}>
             <Input
                 id={'title'}
                 element={'input'}
@@ -52,7 +57,7 @@ const UpdatePlace = () => {
                 label={'Title'}
                 validators={[VALIDATOR_REQUIRE()]}
                 errorText={'Please enter a title'}
-                onInput={inputHandler}
+                onInput={() => {}}
                 value={identifiedPlace.title}
                 valid={true}
             />
@@ -62,11 +67,13 @@ const UpdatePlace = () => {
                 label={'Description'}
                 validators={[VALIDATOR_MINLENGTH(5)]}
                 errorText={'Please enter a description (min 5 characters)'}
-                onInput={inputHandler}
+                onInput={() => {}}
                 value={identifiedPlace.description}
                 valid={true}
             />
-            <Button type={'submit'} disabled={true}>UPDATE PLACE</Button>
+            <Button type={'submit'} disabled={true}>
+                UPDATE PLACE
+            </Button>
         </form>
     );
 };

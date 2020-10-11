@@ -4,20 +4,20 @@ import './Map.css';
 
 const Map = props => {
     const mapRef = useRef();
-    const {centre, zoom} = props;
+    const {center, zoom} = props;
 
     /* Run once component loaded */
     useEffect(() => {
         const map = new window.google.maps.Map(mapRef.current, {
-            center: centre,
+            center: center,
             zoom: zoom
         });
 
         new window.google.maps.Marker({
-            position: centre,
+            position: center,
             map: map
         })
-    }, [centre, zoom])
+    }, [center, zoom])
 
     return (
         <div

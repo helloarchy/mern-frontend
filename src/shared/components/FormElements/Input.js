@@ -32,9 +32,9 @@ const Input = props => {
     /* useReducer instead of state to handle interconnected states
      * Can have second attribute for an initial state */
     const [inputState, dispatch] = useReducer(inputReducer, {
-        value: '',
+        value: props.value || '',
         isTouched: false,
-        isValid: false
+        isValid: props.valid || false
     });
 
     /* Get values for useEffect to avoid infinite loops on value updating when fed back to parent */
@@ -57,7 +57,7 @@ const Input = props => {
     /* User entered then left */
     const touchHandler = () => {
         dispatch({
-            type: 'TOUCH',
+            type: 'TOUCH'
         });
     };
 
