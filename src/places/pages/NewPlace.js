@@ -65,12 +65,18 @@ const NewPlace = () => {
         })
     }, []);
 
+
+    const submitHandler = event => {
+        event.preventDefault(); // Don't refresh page
+        console.log(formState.inputs) // TODO: Send to backend
+    };
+
+
     return (
-        <form className={'place-form'}>
+        <form className={'place-form'} onSubmit={submitHandler}>
             <Input
                 id={'title'}
                 element={'input'}
-                type={'text'}
                 label={'Title'}
                 validators={[VALIDATOR_REQUIRE()]} /* Return a validator configuration object */
                 errorText={'Please enter a valid title'}
@@ -79,10 +85,17 @@ const NewPlace = () => {
             <Input
                 id={'description'}
                 element={'textarea'}
-                type={'textarea'}
                 label={'Description'}
                 validators={[VALIDATOR_MINLENGTH(5)]}
                 errorText={'Please enter a valid description (min 5 characters)'}
+                onInput={inputHandler}
+            />
+            <Input
+                id={'address'}
+                element={'input'}
+                label={'Address'}
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText={'Please enter a valid address'}
                 onInput={inputHandler}
             />
             <Button type={'submit'} disabled={!formState.isValid}>
