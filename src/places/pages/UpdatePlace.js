@@ -3,9 +3,12 @@ import {useParams} from 'react-router-dom';
 
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
-import {VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH} from "../../shared/utility/validators";
+import {
+    VALIDATOR_REQUIRE,
+    VALIDATOR_MINLENGTH
+} from "../../shared/utility/validators";
 
-import './PlaceForm.css'
+import './PlaceForm.css';
 
 const DUMMY_PLACES = [
     {
@@ -35,8 +38,6 @@ const DUMMY_PLACES = [
 ];
 
 const UpdatePlace = () => {
-    console.log("Tried to render update place!")
-
     const placeId = useParams().placeId;
     const identifiedPlace = DUMMY_PLACES.find(place => place.id === placeId);
 
@@ -56,8 +57,9 @@ const UpdatePlace = () => {
                 type={'text'}
                 label={'Title'}
                 validators={[VALIDATOR_REQUIRE()]}
-                errorText={'Please enter a title'}
-                onInput={() => {}}
+                errorText={'Please enter a valid title'}
+                onInput={() => {
+                }}
                 value={identifiedPlace.title}
                 valid={true}
             />
@@ -66,8 +68,9 @@ const UpdatePlace = () => {
                 element={'textarea'}
                 label={'Description'}
                 validators={[VALIDATOR_MINLENGTH(5)]}
-                errorText={'Please enter a description (min 5 characters)'}
-                onInput={() => {}}
+                errorText={'Please enter a valid description (min 5 characters)'}
+                onInput={() => {
+                }}
                 value={identifiedPlace.description}
                 valid={true}
             />

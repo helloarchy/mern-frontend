@@ -26,7 +26,7 @@ const PlaceItem = props => {
             >
                 {/* Portal placed at hook. This content becomes props.children */}
                 <div className={'map-container'}>
-                    <Map center={props.coordinates} zoom={16} />
+                    <Map center={props.coordinates} zoom={16}/>
                 </div>
             </Modal>
             <li className={'place-item'}>
@@ -41,7 +41,7 @@ const PlaceItem = props => {
                     </div>
                     <div className={'place-item__actions'}>
                         <Button inverse onClick={openMapHandler}>VIEW ON MAP</Button>
-                        <Button to={`places/${props.id}`}>EDIT</Button>{/* TODO: iff creator */}
+                        <Button to={`/places/${props.id}`}>EDIT</Button>{/* TODO: iff creator */}
                         <Button danger>DELETE</Button>{/* TODO: iff creator */}
                     </div>
                 </Card>

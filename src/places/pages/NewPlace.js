@@ -3,8 +3,8 @@ import React, {useCallback, useReducer} from 'react';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import {
-  VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
+    VALIDATOR_REQUIRE,
+    VALIDATOR_MINLENGTH
 } from '../../shared/utility/validators';
 
 import './PlaceForm.css';
@@ -71,15 +71,13 @@ const NewPlace = () => {
             value: value,
             inputId: id,
             isValid: isValid,
-        })
+        });
     }, []);
-
 
     const submitHandler = event => {
         event.preventDefault(); // Don't refresh page
         console.log(formState.inputs); // TODO: Send to backend
     };
-
 
     return (
         <form className={'place-form'} onSubmit={submitHandler}>
@@ -103,7 +101,6 @@ const NewPlace = () => {
             <Input
                 id={'address'}
                 element={'input'}
-                type={'text'}
                 label={'Address'}
                 validators={[VALIDATOR_REQUIRE()]}
                 errorText={'Please enter a valid address'}
