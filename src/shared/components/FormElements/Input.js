@@ -1,6 +1,6 @@
 import React, {useReducer, useEffect} from 'react';
 
-import {validate} from "../../utility/validators";
+import {validate} from "../../util/validators";
 
 import './Input.css';
 
@@ -32,9 +32,9 @@ const Input = props => {
     /* useReducer instead of state to handle interconnected states
      * Can have second attribute for an initial state */
     const [inputState, dispatch] = useReducer(inputReducer, {
-        value: props.value || '',
+        value: props.initialValue || '',
         isTouched: false,
-        isValid: props.valid || false
+        isValid: props.initialValid || false
     });
 
     /* Get values for useEffect to avoid infinite loops on value updating when fed back to parent */
@@ -81,9 +81,9 @@ const Input = props => {
     );
 
     return (
-        <div className={`form-control 
-            ${!inputState.isValid && inputState.isTouched && 'form-control__invalid'}`
-        }>
+        <div className={`form-control ${!inputState.isValid && inputState.isTouched &&
+            'form-control--invalid'}`
+            }>
             <label htmlFor={props.id}>
                 {props.label}
             </label>
