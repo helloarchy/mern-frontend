@@ -11,14 +11,14 @@ import {
   VALIDATOR_REQUIRE,
 } from '../../shared/util/validators';
 import {useForm} from '../../shared/hooks/form-hook';
+import {useHttpClient} from '../../shared/hooks/http-hook';
 import {AuthContext} from '../../shared/context/auth-context';
 import './Auth.css';
 
 const Auth = () => {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const {isLoading, error, sendRequest, clearError} = useHttpClient();
 
   const [formState, inputHandler, setFormData] = useForm(
       {
@@ -61,81 +61,50 @@ const Auth = () => {
   const authSubmitHandler = async event => {
     event.preventDefault();
 
-        setIsLoading(true); // Turn off only if loading done
-
     if (isLoginMode) {
       try {
-        const endpoint = 'http://localhost:5000/api/users/login';
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-        });
-
-        const responseData = await response.json();
-
-        // Check for error code in 400's or 500's
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-
-        setIsLoading(false);
-        auth.login();
+        await sendRequest(
+            'http://localhost:5000/api/users/login',
+            'POST',
+            JSON.stringify({
+              email: formState.inputs.email.value,
+              password: formState.inputs.password.value,
+            }),
+            {
+              'Content-Type': 'application/json',
+            },
+        );
+        auth.login(); // Iff no err, we can login
       } catch (err) {
+        // Error handled in hook
         console.log(err);
-        setIsLoading(false);
-        setError(err.message || 'Something went wrong, please try again');
       }
 
     } else {
       try {
-        const endpoint = 'http://localhost:5000/api/users/signup';
-
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-
-        setIsLoading(false);
-        auth.login();
+        await sendRequest(
+            'http://localhost:5000/api/users/signup',
+            'POST',
+            JSON.stringify({
+              name: formState.inputs.name.value,
+              email: formState.inputs.email.value,
+              password: formState.inputs.password.value,
+            }),
+            {
+              'Content-Type': 'application/json',
+            },
+        );
+        auth.login(); // Iff no err, we can login
       } catch (err) {
+        // Error handled by hook
         console.log(err);
-        setIsLoading(false);
-        setError(err.message || 'Something went wrong, please try again');
       }
     }
   };
 
-  /**
-   * Handle the error modal
-   * When user closes it, trigger onClear
-   */
-  const errorHandler = () => {
-    setError(null);
-  };
-
   return (
       <React.Fragment>
-        <ErrorModal error={error} onClear={errorHandler}/>
+        <ErrorModal error={error} onClear={clearError}/>
         <Card className="authentication">
           {
             // Use loading spinner while signup/login request submitted

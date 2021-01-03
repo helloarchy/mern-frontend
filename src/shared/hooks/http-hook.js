@@ -1,4 +1,4 @@
-export {useState, useCallback, useRef, useEffect} from 'react';
+import {useState, useCallback, useRef, useEffect} from 'react';
 
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,16 +31,22 @@ export const useHttpClient = () => {
       });
       const responseData = await response.json();
 
+      // Clear this request now it is complete
+      activeHttpRequests.current = activeHttpRequests.current.filter(
+          reqCtrl => reqCtrl !== httpAbortCtrl
+      )
+
       if (!response.ok) {
         throw new Error(responseData.message);
       }
 
+      setIsLoading(false);
       return responseData;
     } catch (err) {
       setError(err.message);
+      setIsLoading(false);
+      throw err; // Pause execution to give hint to component(s) using this hook
     }
-
-    setIsLoading(false);
   }, [
     //No dependencies
   ]);
@@ -64,5 +70,6 @@ export const useHttpClient = () => {
     isLoading,
     error,
     sendRequest,
+    clearError
   };
 };
