@@ -61,11 +61,40 @@ const Auth = () => {
   const authSubmitHandler = async event => {
     event.preventDefault();
 
+        setIsLoading(true); // Turn off only if loading done
+
     if (isLoginMode) {
+      try {
+        const endpoint = 'http://localhost:5000/api/users/login';
+
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+          }),
+        });
+
+        const responseData = await response.json();
+
+        // Check for error code in 400's or 500's
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setIsLoading(false);
+        auth.login();
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+        setError(err.message || 'Something went wrong, please try again');
+      }
 
     } else {
       try {
-        setIsLoading(true);
         const endpoint = 'http://localhost:5000/api/users/signup';
 
         const response = await fetch(endpoint, {
@@ -81,7 +110,6 @@ const Auth = () => {
         });
 
         const responseData = await response.json();
-        console.log(responseData);
 
         if (!response.ok) {
           throw new Error(responseData.message);
