@@ -1,24 +1,57 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import UsersList from "../components/UsersList";
+import UsersList from '../components/UsersList';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 
 const Users = () => {
-    const USERS = [
-        {
-            id: 'u1',
-            image: 'https://www.onthisday.com/images/people/john-smith-medium.jpg',
-            name: 'John Smith',
-            places: 3
-        },
-        {
-            id: 'u2',
-            image: 'https://lezwatchtv.com/wp-content/uploads/2016/03/questionmarkface-350x412.jpg',
-            name: 'Jane Doseydo',
-            places: 5
-        }
-    ];
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const [loadedUsers, setLoadedUsers] = useState();
 
-    return <UsersList items={USERS}/>;
+  // Fetch users only on first load of component
+  useEffect(() => {
+    // Don't await - useEffect doesn't like async - use an iffy function
+    const sendRequest = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch('http://localhost:5000/api/users');
+        const responseData = await response.json();
+
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+
+        setLoadedUsers(responseData.users);
+
+        setIsLoading(false);
+      } catch (err) {
+        setIsLoading(false);
+        setError(err.message);
+      }
+    };
+    sendRequest(); // Execute immediately
+  }, [
+    // Dependencies
+  ]);
+
+  const errorHandler = () => {
+    setError(null);
+  };
+
+  return (
+      <React.Fragment>
+        <ErrorModal error={error} onClear={errorHandler}/>
+        {isLoading && (
+            <div className={'center'}>
+              <LoadingSpinner/>
+            </div>
+        )}
+        {!isLoading && loadedUsers && (
+            <UsersList items={loadedUsers}/>
+        )}
+      </React.Fragment>
+  );
 };
 
 export default Users;
