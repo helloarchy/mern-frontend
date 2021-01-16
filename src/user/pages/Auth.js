@@ -63,7 +63,7 @@ const Auth = () => {
 
     if (isLoginMode) {
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
             'http://localhost:5000/api/users/login',
             'POST',
             JSON.stringify({
@@ -74,15 +74,14 @@ const Auth = () => {
               'Content-Type': 'application/json',
             },
         );
-        auth.login(); // Iff no err, we can login
+        auth.login(responseData.user.id); // Iff no err, we can login
       } catch (err) {
         // Error handled in hook
         console.log(err);
       }
-
     } else {
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
             'http://localhost:5000/api/users/signup',
             'POST',
             JSON.stringify({
@@ -94,7 +93,8 @@ const Auth = () => {
               'Content-Type': 'application/json',
             },
         );
-        auth.login(); // Iff no err, we can login
+
+        auth.login(responseData.user.id); // Iff no err, we can login
       } catch (err) {
         // Error handled by hook
         console.log(err);

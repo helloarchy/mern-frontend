@@ -52,7 +52,7 @@ export const useHttpClient = () => {
   ]);
 
   const clearError = () => {
-    setError(false)
+    setError(null)
   }
 
   useEffect(() => {
